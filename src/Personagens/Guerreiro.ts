@@ -6,55 +6,39 @@ export class Guerreiro extends Personagem {
         super(
             nome + " Warrior",
             Util.valorAleatorio(1, 1000),    // força
-            0,     // habilidade_mental
-            this.poder_ataque,     // poder_ataque (bom poder de ataque)
-            Util.valorAleatorio(40, 60),     // esquiva (esquiva média)
-            Util.valorAleatorio(70, 90),     // resistencia (boa resistência)
-            150,                             // vida_Maxima (mais vida que o normal)
-            150                              // vida_Atual (começa com vida máxima)
+            0,                               // habilidade_mental
+            0,                               // poder_ataque (bom poder de ataque)
+            Util.valorAleatorio(0, 50),     // esquiva (esquiva média)
+            Util.valorAleatorio(0, 90),     // resistencia (boa resistência)
+            Util.valorAleatorio(1, 40000),  // vida_Maxima (mais vida que o normal)
+            0                              // vida_Atual (começa com vida máxima)
         );
+        this.vidaAtual = this._vidaMaxima;
+        this._poderDeAtaque = this._forca * 10;
     }
 
-    // Métodos para acessar os atributos
-    getForca(): number {
-        return this.forca;
+    private atualizarPoderAtaque(): void {
+        this._poderDeAtaque = this._forca * 10;
     }
 
-    getHabilidadeMental(): number {
-        return this.habilidade_mental;
+    public atacar(adversario: Personagem): void {
+        console.log(`${this.nome} atacou ${adversario.nome}`);
+        this.atacar(adversario);
+        adversario.contraAtacar(this);
     }
 
-    getPoderAtaque(): number {
-        return this.poder_ataque;
+    public contra_atacar(adversario: Personagem): void {
+        console.log(`${this.nome} contra-atacou ${adversario.nome}`);
+        this.atacar(adversario);
     }
 
-    getEsquiva(): number {
-        return this.esquiva;
+    public aprimorarHabilidade(): void {
+        this._forca *= this._forca * 0.10;
+        this.atualizarPoderAtaque();
     }
 
-    getResistencia(): number {
-        return this.resistencia;
+    public regenVida(): void {
+        this.vidaAtual = Math.min(this._vidaMaxima, this.vidaAtual + this._vidaMaxima * 0.1);
     }
 
-    getVidaMaxima(): number {
-        return this.vida_Maxima;
-    }
-
-    getVidaAtual(): number {
-        return this.vida_Atual;
-    }
-
-    // Método para ataque especial do Guerreiro
-    ataquePoderoso(): number {
-        const danoBase = this.poder_ataque + (this.forca * 0.5);
-        return Math.floor(danoBase * 1.5); // 50% de dano adicional
-    }
-
-    // Método para defesa especial do Guerreiro
-    defesaFerrea(): void {
-        this.resistencia += 20; // Aumenta temporariamente a resistência
-        setTimeout(() => {
-            this.resistencia -= 20; // Remove o bônus após 3 segundos
-        }, 3000);
-    }
 }
